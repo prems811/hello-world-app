@@ -1,14 +1,24 @@
 pipeline {
     agent any
     stages {
-        stage('build a docker image') {
+        stage('Checkout Code') {
             steps {
-                sh 'docker build -t myapp .'
+                git branch: 'main', url: 'https://github.com/prems811/hello-world-app.git'
             }
         }
-        stage('Run Container') {
+        stage('Install Dependencies') {
             steps {
-                sh 'docker run -d -p 8080:80 myapp'
+                sh 'npm install'
+            }
+        }
+        stage('Build React App') {
+            steps {
+                sh 'npm run build'
+            }
+        }
+        stage('Run React App') {
+            steps {
+                sh 'nohup npm start &'
             }
         }
     }
